@@ -1,0 +1,10 @@
+{
+  "name": "futureme",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --filter @futureme/backend run dev",
+    "build": "pnpm --filter @futureme/backend run build",
+    "start": "pnpm --filter @futureme/backend run start",
+    "typecheck": "pnpm --filter @futureme/backend run typecheck"
+  }
+}

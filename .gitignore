@@ -1,0 +1,72 @@
+## Dependencies and Build Artifacts
+node_modules/
+dist/
+build/
+pnpm-lock.yaml
+
+## Environment Configuration
+.env
+.env.local
+.env.*.local
+!.env.example
+
+## Logs and Temporary Files
+*.log
+logs/
+*.tmp
+tmp/
+
+## OS and Editor Files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+*.iml
+
+## Internal Documentation (Development Only)
+# These files are for internal use during development
+# and should not be included in public repositories
+BACKEND_AUDIT_FINAL_REPORT.md
+BACKEND_CODE_ISSUES_SCAN.md
+BACKEND_ENDPOINT_TESTING_GUIDE.md
+IMPLEMENTATION_COMPLETE_SUMMARY.md
+COMPLETE_IMPLEMENTATION_SUMMARY.md
+UPLOAD_IMPLEMENTATION_SUMMARY.md
+ISSUES_INVENTORY_COMPLETE.md
+STABILITY_INDEX.md
+PRODUCTION_UPGRADE_SUMMARY.txt
+DOCUMENTATION_AUDIT_SUMMARY.md
+PRODUCTION_READINESS_SQL_FIXES.md
+
+## Test and Debug Scripts
+cleanup-emojis.sh
+syntax-check.sh
+test-db-connection.ts
+test-upload.txt
+**/test.js
+**/test.ts
+**/test.mjs
+run-*.js
+run-*.ts
+run-*.sh
+debug-*.js
+debug-*.ts
+
+## Postman Collections (Optional - use version control separately if needed)
+FutureMe_API*.postman_*.json
+
+## IDE and Build Cache
+.turbo/
+.eslintcache
+tsconfig.tsbuildinfo
+
+## Docker
+.dockerignore.env
+.env.development .env.example .env.production
+.env
+.env.development .env.example .env.production
+.env
+.env.*
