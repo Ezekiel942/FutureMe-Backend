@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "nodemon -r tsconfig-paths/register --watch src -e ts --exec ts-node src/server.ts",
     "build": "tsc",
-    "start": "nodemon -r tsconfig-paths/register --exec ts-node src/server.ts",
+    "start": "node dist/server.js",
+    "typecheck": "tsc --noEmit",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
