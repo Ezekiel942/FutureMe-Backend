@@ -1,3 +1,6 @@
+// CRITICAL: Register module aliases FIRST before any imports
+import 'module-alias/register';
+
 import http from 'http';
 
 // CRITICAL: Load environment variables first, before importing any modules that use them

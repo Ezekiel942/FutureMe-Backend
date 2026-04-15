@@ -13,15 +13,15 @@
     "forceConsistentCasingInFileNames": true,
     "ignoreDeprecations": "6.0",
     "types": ["node", "jest"],
-    "baseUrl": "src",
+    "baseUrl": ".",
     "paths": {
-      "@config/*": ["config/*"],
-      "@utils/*": ["utils/*"],
-      "@modules/*": ["modules/*"],
-      "@engines/*": ["engines/*"],
-      "@infrastructure/*": ["infrastructure/*"],
-      "@database/*": ["database/*"],
-      "@api/*": ["api/*"]
+      "@config/*": ["src/config/*"],
+      "@utils/*": ["src/utils/*"],
+      "@modules/*": ["src/modules/*"],
+      "@engines/*": ["src/engines/*"],
+      "@infrastructure/*": ["src/infrastructure/*"],
+      "@database/*": ["src/database/*"],
+      "@api/*": ["src/api/*"]
     }
   },
   "include": ["src"],
