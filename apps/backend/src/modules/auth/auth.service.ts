@@ -36,6 +36,9 @@ export const register = async (input: RegisterInput) => {
   const { email, password, firstName, lastName } = input;
 
   try {
+    if (!supabase || !supabase.auth) {
+      throw new AuthError('Supabase auth not initialized', 'SUPABASE_NOT_INITIALIZED', 500);
+    }
     // Sign up with Supabase Auth
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -83,6 +86,9 @@ export const login = async (input: LoginInput): Promise<AuthResponse> => {
   const { email, password } = input;
 
   try {
+    if (!supabase || !supabase.auth) {
+      throw new AuthError('Supabase auth not initialized', 'SUPABASE_NOT_INITIALIZED', 500);
+    }
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -113,6 +119,9 @@ export const login = async (input: LoginInput): Promise<AuthResponse> => {
  */
 export const logout = async () => {
   try {
+    if (!supabase || !supabase.auth) {
+      throw new AuthError('Supabase auth not initialized', 'SUPABASE_NOT_INITIALIZED', 500);
+    }
     const { error } = await supabase.auth.signOut();
 
     if (error) {
@@ -131,6 +140,9 @@ export const logout = async () => {
  */
 export const getCurrentUser = async () => {
   try {
+    if (!supabase || !supabase.auth) {
+      throw new AuthError('Supabase auth not initialized', 'SUPABASE_NOT_INITIALIZED', 500);
+    }
     const { data, error } = await supabase.auth.getUser();
 
     if (error) {
@@ -149,6 +161,9 @@ export const getCurrentUser = async () => {
  */
 export const verifyToken = async (token: string) => {
   try {
+    if (!supabase || !supabase.auth) {
+      throw new AuthError('Supabase auth not initialized', 'SUPABASE_NOT_INITIALIZED', 500);
+    }
     // Supabase handles token verification internally
     // We can use getUser to verify the token is valid
     const { data, error } = await supabase.auth.getUser(token);
@@ -181,6 +196,9 @@ export const verifyToken = async (token: string) => {
  */
 export const refreshSession = async () => {
   try {
+    if (!supabase || !supabase.auth) {
+      throw new AuthError('Supabase auth not initialized', 'SUPABASE_NOT_INITIALIZED', 500);
+    }
     const { data, error } = await supabase.auth.refreshSession();
 
     if (error) {
@@ -197,6 +215,9 @@ export const refreshSession = async () => {
 // Legacy compatibility functions (deprecated)
 export const loginWithTokens = async (input: LoginInput) => {
   const result = await login(input);
+  if (!result.session) {
+    throw new AuthError('Login failed - no session', 'NO_SESSION', 401);
+  }
   return {
     accessToken: result.session.access_token,
     refreshToken: result.session.refresh_token,
@@ -224,6 +245,9 @@ export const refreshAccessToken = async (refreshToken: string) => {
 };
 
 export const issuePasswordReset = async (email: string) => {
+  if (!supabase || !supabase.auth) {
+    throw new AuthError('Supabase auth not initialized', 'SUPABASE_NOT_INITIALIZED', 500);
+  }
   const { error } = await supabase.auth.resetPasswordForEmail(email);
   if (error) {
     throw new AuthError(error.message, error.status?.toString(), 400);
@@ -232,6 +256,9 @@ export const issuePasswordReset = async (email: string) => {
 };
 
 export const resetPassword = async (token: string, newPassword: string) => {
+  if (!supabase || !supabase.auth) {
+    throw new AuthError('Supabase auth not initialized', 'SUPABASE_NOT_INITIALIZED', 500);
+  }
   // This would typically be handled on the frontend with the token
   // For backend compatibility, we'll assume the token is valid
   const { error } = await supabase.auth.updateUser({

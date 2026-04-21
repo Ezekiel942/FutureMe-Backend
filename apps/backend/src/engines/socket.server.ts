@@ -3,6 +3,7 @@ import { Server, Socket } from 'socket.io';
 import logger from '../utils/logger';
 import presence from './presence';
 import * as AuthService from '../modules/auth/auth.service';
+import { initializeChatSocket } from '../modules/chat/chat.socket';
 
 let io: Server | null = null;
 
@@ -209,6 +210,9 @@ export const initializeSocket = (httpServer: HTTPServer): Server => {
       logger.info('Socket left admin sessions channel', { socketId: socket.id, userId });
     });
   });
+
+  // Initialize chat socket handlers
+  initializeChatSocket(io);
 
   return io;
 };

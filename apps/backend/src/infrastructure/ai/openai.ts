@@ -620,5 +620,15 @@ Return JSON: { "burnoutScore": <0-100>, "riskLevel": "<low|moderate|high|critica
   }
 }
 
-export default new OpenAIClient();
-export const openaiService = new OpenAIClient();
+// Singleton instance - prevents duplicate initialization warnings
+let openaiInstance: OpenAIClient | null = null;
+
+export const getOpenAIClient = (): OpenAIClient => {
+  if (!openaiInstance) {
+    openaiInstance = new OpenAIClient();
+  }
+  return openaiInstance;
+};
+
+export default getOpenAIClient();
+export const openaiService = getOpenAIClient();

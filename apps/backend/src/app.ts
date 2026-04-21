@@ -22,6 +22,7 @@ import tenantRoutes from './api/routes/tenant.routes';
 import digitalTwinRoutes from './api/routes/digitalTwin.routes';
 import skillGraphRoutes from './api/routes/skillGraph.routes';
 import uploadRoutes from './modules/upload/upload.routes';
+import chatRoutes from './modules/chat/chat.routes';
 import errorHandler from './api/middlewares/error.middleware';
 import paginationMiddleware from './api/middlewares/pagination.middleware';
 import requestIdMiddleware from './api/middlewares/requestId.middleware';
@@ -41,6 +42,21 @@ export function createApp(): Express {
   const app = express();
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // ROOT HEALTH CHECK ENDPOINTS (must be first)
+  // ═══════════════════════════════════════════════════════════════════════════
+  app.get('/', (req: Request, res: Response) => {
+    res.status(200).json({
+      status: 'ok',
+      service: 'FutureMe Backend',
+      environment: process.env.NODE_ENV,
+      uptime: process.uptime(),
+      timestamp: new Date().toISOString(),
+    });
+  });
+
+  app.get('/health', (req: Request, res: Response) => {
+    res.status(200).json({ status: 'healthy' });
+  });
   // REQUEST ID MIDDLEWARE (must be first)
   // ═══════════════════════════════════════════════════════════════════════════
   // Generates/extracts request ID for request tracing and correlation
@@ -131,13 +147,7 @@ export function createApp(): Express {
   // Cookie parsing
   app.use(cookieParser());
 
-  // Request logging with monitoring
-  app.use(requestLogger);
-
-  // Request logging with monitoring
-  app.use(requestLogger);
-
-  // Request logging with monitoring
+  // Request logging with monitoring (registered once)
   app.use(requestLogger);
 
   // Structured request logger (includes requestId)
@@ -229,14 +239,9 @@ export function createApp(): Express {
   app.use('/api/v1/workforce', workforceRoutes);
   app.use('/api/v1/digital-twin', digitalTwinRoutes);
   app.use('/api/v1/skills', skillGraphRoutes);
+  app.use('/api/chat', chatRoutes);
 
-  // Error logger (before final error handler)
-  app.use(errorLogger);
-
-  // Error logger (before final error handler)
-  app.use(errorLogger);
-
-  // Error logger (before final error handler)
+  // Error logger (before final error handler - registered once)
   app.use(errorLogger);
 
   // Sentry error capture (before final error handler)

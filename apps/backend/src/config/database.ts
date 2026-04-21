@@ -148,7 +148,7 @@ const createSupabaseRepository = (entity: any) => {
           }
 
           // Log payload before insert
-          console.log('work_sessions insert payload:', payload);
+          // ...existing code...
 
           // Use the explicit payload instead of convertPayload and the admin client for work_sessions
           const dbClient = getSupabaseClient(table);

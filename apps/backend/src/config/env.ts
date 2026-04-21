@@ -1,15 +1,20 @@
 import * as dotenv from 'dotenv';
+import * as path from 'path';
 
 // Load environment files based on NODE_ENV
 // IMPORTANT: Does NOT load default .env file to prevent overrides
 const loadEnvironment = () => {
   const nodeEnv = process.env.NODE_ENV || 'development';
-
+  
+  // Use process.cwd() which is the project root when running pnpm dev
+  // This ensures we load from apps/backend/.env.development
+  const projectRoot = process.cwd();
+  
   // Load environment-specific file only
   if (nodeEnv === 'development') {
-    dotenv.config({ path: '.env.development' });
+    dotenv.config({ path: path.join(projectRoot, '.env.development') });
   } else if (nodeEnv === 'production') {
-    dotenv.config({ path: '.env.production' });
+    dotenv.config({ path: path.join(projectRoot, '.env.production') });
   }
   // Note: .env file is NOT loaded to prevent accidental overrides
 };
@@ -18,7 +23,7 @@ loadEnvironment();
 
 // Environment validation with improved error handling
 const validateEnvironment = () => {
-  console.log(`Validating environment for NODE_ENV=${process.env.NODE_ENV || 'development'}`);
+  // ...existing code...
 
   // REQUIRED variables - app will crash if missing
   const requiredVars = ['PORT'];
@@ -44,7 +49,7 @@ const validateEnvironment = () => {
   }
 
   if (hasSupabase) {
-    console.log('Using Supabase for database operations');
+    // ...existing code...
   } else {
     console.warn(
       'DATABASE_URL found; legacy Postgres configuration is still detected, but Supabase is preferred.'
@@ -65,18 +70,18 @@ const validateEnvironment = () => {
     const missing = vars.filter((key) => !process.env[key]);
     if (missing.length > 0) {
       if (!hasWarnings) {
-        console.log('\nOPTIONAL SERVICES: Some features will be disabled:');
+        // ...existing code...
         hasWarnings = true;
       }
-      console.log(`   - ${service}: Missing ${missing.join(', ')}`);
+      // ...existing code...
     }
   }
 
   if (hasWarnings) {
-    console.log('\nOptional services can be configured later without restarting the app.');
+    // ...existing code...
   }
 
-    console.log('Environment validation passed');
+    // ...existing code...
 };
 
 validateEnvironment();
@@ -131,6 +136,7 @@ export const ENV = {
 
   // Caching (Redis) - Optional
   REDIS_URL: getOptionalEnv('REDIS_URL'),
+  REDIS_ENABLED: getOptionalBoolean('REDIS_ENABLED', false),
 
   // Monitoring (Sentry) - Optional
   SENTRY_DSN: getOptionalEnv('SENTRY_DSN'),

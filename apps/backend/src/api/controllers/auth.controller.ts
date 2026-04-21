@@ -31,18 +31,19 @@ export const register = async (req: Request, res: Response) => {
       // audit service swallows errors, but keep guard
     }
 
+    // Return response compatible with Flutter frontend expectations
+    // Note: In development mode, Supabase may not send verification email automatically
+    // TODO: In production, enforce email verification
     success(res, {
       id: result.user.id,
       email: result.user.email,
       firstName: firstName || result.user.user_metadata?.first_name,
-      lastName: lastName || result.user.user_metadata?.last_name,
-      session: result.session
-        ? {
-            accessToken: result.session.access_token,
-            refreshToken: result.session.refresh_token,
-            expiresAt: result.session.expires_at,
-          }
-        : null,
+      secondName: lastName || result.user.user_metadata?.last_name,
+      token: result.session?.access_token || null,
+      refreshToken: result.session?.refresh_token || null,
+      message: result.session 
+        ? 'Registration successful' 
+        : 'Registration successful. Please check your email to verify your account.',
     });
   } catch (err: any) {
     const message = err?.message || 'Registration failed';
@@ -59,6 +60,9 @@ export const login = async (req: Request, res: Response) => {
 
     const result = await AuthService.loginWithTokens({ email, password });
 
+    // Extract user data from the token
+    const userData = await AuthService.verifyToken(result.accessToken);
+
     // Set refresh token as httpOnly cookie (optional, client can also store it)
     if (result.refreshToken) {
       res.cookie('refreshToken', result.refreshToken, {
@@ -69,21 +73,21 @@ export const login = async (req: Request, res: Response) => {
       });
     }
 
+    // Return response compatible with Flutter frontend expectations
     success(res, {
-      accessToken: result.accessToken,
-      refreshToken: result.refreshToken, // Also return in body for SPA convenience
+      token: result.accessToken,
+      refreshToken: result.refreshToken,
       user: {
-        id: 'temp-id', // Will be extracted from token by middleware
-        email,
-        role: 'user',
+        id: userData.sub || userData.id,
+        email: userData.email,
+        firstName: userData.user_metadata?.first_name || userData.user_metadata?.firstName,
+        secondName: userData.user_metadata?.last_name || userData.user_metadata?.lastName || userData.user_metadata?.secondName,
       },
     });
 
     // Audit log: login (fire-and-forget) - moved after response for better UX
     setImmediate(async () => {
       try {
-        // We need to get the user ID from the token
-        const userData = await AuthService.verifyToken(result.accessToken);
         await auditLog({
           userId: userData.sub,
           action: 'login',

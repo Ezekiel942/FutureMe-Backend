@@ -41,7 +41,7 @@ class Logger {
         break;
       case 'debug':
         if (isDev) {
-          console.log(output, entry.data ? entry.data : '');
+          // ...existing code...
         }
         break;
     }

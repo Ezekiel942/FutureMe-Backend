@@ -203,7 +203,7 @@ export function createRepository(entity: any) {
           }
 
           // Log payload before insert
-          console.log('work_sessions insert payload:', payload);
+          // ...existing code...
 
           // Use the explicit payload instead of convertPayload
           const { data, error } = await supabase.from(table).insert([payload]).select().single();
