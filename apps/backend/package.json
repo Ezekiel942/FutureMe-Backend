@@ -3,13 +3,13 @@
   "version": "0.1.0",
   "main": "src/server.ts",
   "_moduleAliases": {
-    "@config": "src/config",
-    "@utils": "src/utils",
-    "@modules": "src/modules",
-    "@engines": "src/engines",
-    "@infrastructure": "src/infrastructure",
-    "@database": "src/database",
-    "@api": "src/api"
+    "@config": "dist/config",
+    "@utils": "dist/utils",
+    "@modules": "dist/modules",
+    "@engines": "dist/engines",
+    "@infrastructure": "dist/infrastructure",
+    "@database": "dist/database",
+    "@api": "dist/api"
   },
   "scripts": {
     "dev": "nodemon -r tsconfig-paths/register --watch src -e ts --exec ts-node src/server.ts",
